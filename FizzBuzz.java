@@ -8,7 +8,7 @@ public class FizzBuzz
 	{
         System.out.println("Enter a Number");
         BufferedReader reader =new BufferedReader(new InputStreamReader(System.in));
-		int in = Integer.parseInt(reader.readLine());
+        int in = Integer.parseInt(reader.readLine());
         for (int i=1; i<=in; i++)								
 		{
 			if (i%15==0)												
