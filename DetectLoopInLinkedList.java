@@ -1,49 +1,76 @@
-// Program to detect loop in a linked list
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 public class DetectLoopInLinkedList {
-	Node head; 
-	class Node {
-		int data;
-		Node next;
-		Node(int d)
-		{
-			data = d;
-			next = null;
+    Node startNode;
+    static class Node {
+        int data;
+        Node next;
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    public static DetectLoopInLinkedList insertAtEnd(DetectLoopInLinkedList list, int d) {
+        Node node = new Node(d);
+		if (list.startNode == null) {
+			list.startNode = node;
 		}
-	}
-	public void push(int new_data)
-	{
-		Node new_node = new Node(new_data);
-		new_node.next = head;
-		head = new_node;
-	}
-	void detectLoop()
-	{
-		Node slow_p = head, fast_p = head;
-		int flag = 0;
-		while (slow_p != null && fast_p != null
-			&& fast_p.next != null) {
-			slow_p = slow_p.next;
-			fast_p = fast_p.next.next;
-			if (slow_p == fast_p) {
-				flag = 1;
-				break;
-			}
+		else {
+            Node temp = list.startNode;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            temp.next = node;            
 		}
-		if (flag == 1)
+		return list;
+    }
+
+    public static void detectLoop(DetectLoopInLinkedList temp) {
+
+        //Make a loop
+        Node start = temp.startNode;
+        if (start == null) {
+            System.out.println("No Data, Can Not Create The Loop");
+            return;
+        }
+        Node firstNode = start;
+        while (start.next != null) {
+            start = start.next;
+        }
+        start.next = firstNode; //Loop Created
+
+        Node slowPointer = temp.startNode, fastPointer = temp.startNode;
+        int flag = 0;
+        while (slowPointer != null && fastPointer != null && fastPointer.next != null) {
+            slowPointer = slowPointer.next;
+            fastPointer = fastPointer.next.next;
+            if (slowPointer == fastPointer) {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 1)
 		System.out.println("Loop is found");
 		else
 		System.out.println("Loop is not found");
-	}
+    }
 
-	public static void main(String args[])
-	{
-		DetectLoopInLinkedList myList = new DetectLoopInLinkedList();
+    public static void main(String[] args) throws IOException {
+        
+        DetectLoopInLinkedList mySinglyLinkedList = new DetectLoopInLinkedList();
+        
+        System.out.println("Enter Size of The Linked List");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int size = Integer.parseInt(reader.readLine());
+        
+        for (int i = 0; i < size; i++) {
+            System.out.println("Enter Data");
+            int input = Integer.parseInt(reader.readLine());
+            mySinglyLinkedList = insertAtEnd(mySinglyLinkedList,input);
+        }
 
-		myList.push(5);
-		myList.push(10);
-		myList.push(15);
-		myList.push(20);		
-        myList.head.next.next.next.next = myList.head;
-		myList.detectLoop();
-	}
+        detectLoop(mySinglyLinkedList);
+    }
 }
